@@ -1,7 +1,7 @@
 import json
 
 keys_stockpile_list = ['stockpile_']
-ignore_stockpile_key_list = ['stockpile_user', 'stockpile_path']
+ignore_stockpile_key_list = ['stockpile_user', 'stockpile_output_path']
 
 
 def check_key_stockpile(key):
