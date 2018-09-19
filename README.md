@@ -44,103 +44,120 @@ The smallest sample would look like:
 
 ## Contributing(create patchsets)
 
+Please visit http://gerrithub.io/ and Sign In with your github account.
+Make sure to import your ssh keys.
 
-    Please visit http://gerrithub.io/ and Sign In with your github account.
-    Make sure to import your ssh keys.
-
-    Now, clone the github repository
-
-    ::
+Now, clone the github repository
 
         $ git clone https://github.com/redhat-performance/scribe.git
 
-    Make sure, you've git-review installed, following should work.
-
-
-    ::
+Make sure, you've git-review installed, following should work.
 
         $ sudo pip install git-review
 
-
-    To set up your cloned repository to work with Gerrit
-
-    ::
+To set up your cloned repository to work with Gerrit
 
         $ git review -s
 
-    It's suggested to create a branch to do your work,
-    name it something related to the change you'd like to introduce.
-
-    ::
+It's suggested to create a branch to do your work,
+name it something related to the change you'd like to introduce.
 
         $ git branch my_special_enhancement
         $ git checkout !$
 
-    Make your changes and then commit them using the instructions
-    below.
-
-    ::
+Make your changes and then commit them using the instructions
+below.
 
         $ git add /path/to/files/changed
         $ git commit -m "your commit title"
 
-    Use a descriptive commit title followed by an empty space.
-    You should type a small justification of what you are
-    changing and why.
+Use a descriptive commit title followed by an empty space.
+You should type a small justification of what you are
+changing and why.
 
-    Now you're ready to submit your changes for review:
-
-    ::
+Now you're ready to submit your changes for review:
 
         $ git review
 
 
-    If you want to make another patchset from the same commit you can
-    use the amend feature after further modification and saving.
+If you want to make another patchset from the same commit you can
+use the amend feature after further modification and saving. Make sure to be on
+same branch, and if don't have the branch please follow next set of instructions
 
-    ::
-
-        $ git add /path/to/files/changed
+				$ git add /path/to/files/changed
         $ git commit --amend
         $ git review
 
-    If you want to submit a new patchset from a different location
-    (perhaps on a different machine or computer for example) you can
-    clone the repo again (if it doesn't already exist) and then
-    use git review against your unique Change-ID:
-
-    ::
+If you want to submit a new patchset from a different location
+(perhaps on a different machine or computer for example) you can
+clone the repo again (if it doesn't already exist) and then
+use git review against your unique Change-ID:
 
         $ git review -d Change-Id
 
-    Change-Id is the change id number as seen in Gerrit and will be
-    generated after your first successful submission. So, in case of
-    https://review.gerrithub.io/#/c/redhat-performance/scribe/+/425014/
+Change-Id is the change id number as seen in Gerrit and will be
+generated after your first successful submission. So, in case of
+https://review.gerrithub.io/#/c/redhat-performance/scribe/+/425014/
 
-    You can either do git review -d 425014 as it's the number
+You can either do git review -d 425014 as it's the number
+or you can do git review -d If0b7b4f30615e46f009759b32a3fc533e811ebdc
+where If0b7b4f30615e46f009759b32a3fc533e811ebdc is the change-id present
 
-    or you can do git review -d If0b7b4f30615e46f009759b32a3fc533e811ebdc
-    where If0b7b4f30615e46f009759b32a3fc533e811ebdc is the change-id present
+Make the changes on the branch that was setup by using the git review -d
+(the name of the branch is along the lines of
+review/username/branch_name/patchsetnumber).
 
-		Make the changes on the branch that was setup by using the git review -d
-    (the name of the branch is along the lines of
-    review/username/branch_name/patchsetnumber).
-
-    Add the files to git and commit your changes using,
-
-    ::
+Add the files to git and commit your changes using,
 
         $ git commit --amend
 
-    You can edit your commit message as well in the prompt shown upon
-    executing above command.
+You can edit your commit message as well in the prompt shown upon
+executing above command.
 
-    Finally, push the patch for review using,
-
-    ::
+Finally, push the patch for review using,
 
         $ git review
 
+### Adding Depends-On to commit message
+
+A lot of times, especially when adding a new module.. Changes made to scribe,
+will not ensure the CI to work propery until the respective changes to stockpile
+are merged. In this case, to ensure CI doesn't work with master branch of
+stockpile but rather the patchset you submitted to stockpile, You can use the
+depends-on functionality.
+
+To add Depends-On functionality, please copy the Change-Id of the patchset you
+submitted to stockpile, and add it to the commit message at the end like this.
+
+Note: Please add it after Change-Id in commit message.
+
+The commit message should look like:
+
+				Your commit message
+
+				Change-Id: I9bc121f076b8625da88705c9d96bd00117f94c22
+
+				Depends-On: {Change-Id of the review submitted to stockpile}
+
+Say for example, you're working on adding a module to process satellite data,
+the CI won't be able to test it because stockpile doesn't have a satellite
+collection yet. However, because you've a commit thats still yet to be merged
+like https://review.gerrithub.io/#/c/redhat-performance/stockpile/+/425015/
+
+You can still ensure and verify stockpile-scribe workflow by adding Depends-On
+to your commit message in scribe, so commit message will look like:
+
+				Adding satellite Module to work.
+
+				Change-Id: some_random_change_id_generated_after_git_review
+
+				Depends-On: I66329511b38a558ce61efb7edb4c3be18625b252
+
+Note that the change ID in Depends-On is the same one in
+https://review.gerrithub.io/#/c/redhat-performance/stockpile/+/425015/
+
+For another example look at:
+https://review.gerrithub.io/#/c/redhat-performance/scribe/+/425969/
 
 ## Contributing(making changes)
 
