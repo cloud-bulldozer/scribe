@@ -10,8 +10,8 @@ It is suggested to use a venv to install and run scribe.
 
 	python3 -m venv /path/to/new/virtual/environment
     source /path/to/new/virtual/environment/bin/activate
-    pip install git+https://github.com/redhat-performance/scribe
-
+    git clone https://github.com/redhat-performance/scribe
+    pip install -e scribe/
 
 Note: we're creating a python3 venv here as scribe is written in python3 and
       is currently incompatible with python2
@@ -84,7 +84,7 @@ If you want to make another patchset from the same commit you can
 use the amend feature after further modification and saving. Make sure to be on
 same branch, and if don't have the branch please follow next set of instructions
 
-				$ git add /path/to/files/changed
+	$ git add /path/to/files/changed
         $ git commit --amend
         $ git review
 
@@ -133,11 +133,11 @@ Note: Please add it after Change-Id in commit message.
 
 The commit message should look like:
 
-				Your commit message
+	Your commit message
 
-				Change-Id: I9bc121f076b8625da88705c9d96bd00117f94c22
+	Change-Id: I9bc121f076b8625da88705c9d96bd00117f94c22
 
-				Depends-On: {Change-Id of the review submitted to stockpile}
+	Depends-On: {Change-Id of the review submitted to stockpile}
 
 Say for example, you're working on adding a module to process satellite data,
 the CI won't be able to test it because stockpile doesn't have a satellite
@@ -147,11 +147,11 @@ like https://review.gerrithub.io/#/c/redhat-performance/stockpile/+/425015/
 You can still ensure and verify stockpile-scribe workflow by adding Depends-On
 to your commit message in scribe, so commit message will look like:
 
-				Adding satellite Module to work.
+	Adding satellite Module to work with stockpile.
 
-				Change-Id: some_random_change_id_generated_after_git_review
+	Change-Id: some_random_change_id_generated_after_git_review
 
-				Depends-On: I66329511b38a558ce61efb7edb4c3be18625b252
+	Depends-On: I66329511b38a558ce61efb7edb4c3be18625b252
 
 Note that the change ID in Depends-On is the same one in
 https://review.gerrithub.io/#/c/redhat-performance/stockpile/+/425015/
@@ -257,7 +257,7 @@ While for scribe\_module\_1 for host1, the value that will be passed would be:
 
 Steps to extend scribe to work with a new input-type 'example1' would involve:
 
-1 Creating 'example1.py' in the 'transcribe/scribes/' directory. The sample
+1. Creating 'example1.py' in the 'transcribe/scribes/' directory. The sample
 code would look like:
 
 
@@ -304,7 +304,7 @@ e) emit\_scribe\_dict is an abstractmethod and thus it needs to be defined in an
 other class that is written. However the method itself can be changed
 but it should return the dictionary object as described above.
 
-2 Add the module to choices list in scribe.py at L14, currently it looks like
+2. Add the module to choices list in scribe.py at L14, currently it looks like
    choices=['stockpile'], because at the time of creating this documentation
    only stockpile data could be transcribed using scribe.
 
