@@ -264,6 +264,13 @@ Note: The name of the yml file should match that of the scribe_modules class
 that you create it for. Thus, for 'example1' class the file should be named
 'example1.yml'
 
+3. When adding a new scribe module for Stockpile please be sure to include 
+an example resulting json with the same name. This will be run in our
+CI test suite. An easy way to obtain this json is by running the following
+from your stockpile directory:
+```ansible-playbook -i hosts stockpile.yml --tags=[my_module_tags],dump-facts```
+Then copy the resulting json file to ci/[my_module_name].json
+
 ## Data Model and ES templates
 
 Directory 'transcribe/schema' will essentially contain the data model.
