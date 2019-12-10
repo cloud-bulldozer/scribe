@@ -1,5 +1,5 @@
 from . import ScribeModuleBaseClass
-from . lib.util import format_url
+from . lib.util import to_list
 
 import re as _re
 import sys
@@ -34,4 +34,9 @@ class K8s_namespaces(ScribeModuleBaseClass):
         if len(new_items) <= 1:
             print("Error occured in processing k8s Namespaces data")
             sys.exit(1)
-        return json.loads(new_items)
+        # Flatten some of the dictionaries to lists
+        new_dict = json.loads(new_items)
+        new_dict = to_list("metadata","annotations",new_dict)
+        new_dict = to_list("metadata","labels",new_dict)
+
+        return new_dict

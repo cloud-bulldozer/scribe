@@ -1,5 +1,5 @@
 from . import ScribeModuleBaseClass
-from . lib.util import format_url
+from . lib.util import to_list
 
 import re as _re
 import sys
@@ -22,9 +22,12 @@ class K8s_nodes(ScribeModuleBaseClass):
             yield attr, value
 
     def _parse(self, nodes_full):
-        # Currently no work needs to be done to node info so we
-        # just confirm that it has data and move on
+        # Flatten some of the dictionaries to lists
         if len(nodes_full) <= 1:
             print("Error occured in processing k8s Nodes data")
             sys.exit(1)
+        
+        nodes_full = to_list("metadata","annotations",nodes_full)
+        nodes_full = to_list("metadata","labels",nodes_full)
+        
         return nodes_full
