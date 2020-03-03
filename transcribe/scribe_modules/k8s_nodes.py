@@ -1,9 +1,5 @@
 from . import ScribeModuleBaseClass
-from . lib.util import to_list
-
-import re as _re
-import sys
-
+from . lib.util import to_list, validate_length
 
 class K8s_nodes(ScribeModuleBaseClass):
 
@@ -14,20 +10,14 @@ class K8s_nodes(ScribeModuleBaseClass):
                                        host_name=host_name,
                                        input_type=input_type,
                                        scribe_uuid=scribe_uuid)
-        if input_dict:
-            self.value = self._parse(input_dict)
 
-    def __iter__(self):
-        for attr, value in self.__dict__.items():
-            yield attr, value
-
-    def _parse(self, nodes_full):
+    def _parse(self):
+        nodes_full = self._input_dict
         # Flatten some of the dictionaries to lists
-        if len(nodes_full) <= 1:
-            print("Error occured in processing k8s Nodes data")
-            sys.exit(1)
-        
+        validate_length(len(nodes_full), self.module)
+        # Flatten some of the dictionaries to lists
         nodes_full = to_list("metadata","annotations",nodes_full)
         nodes_full = to_list("metadata","labels",nodes_full)
-        
-        return nodes_full
+        output_dict = self._dict
+        output_dict['value'] = nodes_full
+        yield output_dict

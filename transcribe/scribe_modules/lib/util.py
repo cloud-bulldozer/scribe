@@ -12,3 +12,7 @@ def to_list(first_lvl, second_lvl, my_dict):
             my_dict[first_lvl][second_lvl] = tmp_list
     return my_dict
 
+
+def validate_length(length, module_name):
+    if length <= 1:
+        raise ValueError('Error occurred in processing {} data'.format(module_name))

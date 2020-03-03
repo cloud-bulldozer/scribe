@@ -1,9 +1,7 @@
 from . import ScribeModuleBaseClass
-
+from . lib.util import validate_length
 
 import re as _re
-import sys
-
 
 class Dmidecode(ScribeModuleBaseClass):
 
@@ -14,14 +12,10 @@ class Dmidecode(ScribeModuleBaseClass):
                                        host_name=host_name,
                                        input_type=input_type,
                                        scribe_uuid=scribe_uuid)
-        if input_dict:
-            self.value = self._parse(input_dict)
 
-    def __iter__(self):
-        for attr, value in self.__dict__.items():
-            yield attr, value
-
-    def _parse(self, dmide_fullinput):
+    def parse(self):
+        dmide_fullinput = self._input_dict
+        output_dict = self._dict
         output_data = {}
         # in case of output such as
         #   BIOS Information
@@ -36,9 +30,7 @@ class Dmidecode(ScribeModuleBaseClass):
         # This is what the next line does
         dmide_fullinput = dmide_fullinput.replace('\n\t\t', ' ')
         split_output = dmide_fullinput.replace('\t', '').split('\n\n')
-        if len(split_output) <= 1:
-            print("Error occured in processing dmidecode data")
-            sys.exit(1)
+        validate_length(len(split_output), self.module)
         for record in split_output:
             split_lines = record.split('\n')
             for x in range(len(split_lines)):
@@ -65,4 +57,5 @@ class Dmidecode(ScribeModuleBaseClass):
                         key_val.append("None")
                     current_dict[key_val[0].replace(' ', '_')] = key_val[1]
                 output_data[split_lines[0]].append(current_dict)
-        return output_data
+        output_dict['value'] = output_data
+        yield output_dict

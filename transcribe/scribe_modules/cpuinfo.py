@@ -1,9 +1,7 @@
 from . import ScribeModuleBaseClass
-from . lib.util import format_url
+from . lib.util import validate_length
 
 import re as _re
-import sys
-
 
 class Cpuinfo(ScribeModuleBaseClass):
 
@@ -14,19 +12,12 @@ class Cpuinfo(ScribeModuleBaseClass):
                                        host_name=host_name,
                                        input_type=input_type,
                                        scribe_uuid=scribe_uuid)
-        if input_dict:
-            self.value = self._parse(input_dict)
 
-    def __iter__(self):
-        for attr, value in self.__dict__.items():
-            yield attr, value
-
-    def _parse(self, cpu_fullinput):
+    def parse(self):
+        cpu_fullinput = self._input_dict
         output_data = {}
         split_lines = cpu_fullinput.get("lscpu").split('\n')
-        if len(split_lines) <= 1:
-            print("Error occured in processing CPU Info data")
-            sys.exit(1)
+        validate_length(len(split_lines), self.module)
         for x in range(len(split_lines)):
             # There are cases where the value has leading whitespaces
             # And also removing multiple whitespaces in general
@@ -56,4 +47,6 @@ class Cpuinfo(ScribeModuleBaseClass):
             # We update our dictionary with the created Flags list above
             current_dict.update({'Flags': new_flags})
             output_data[split_lines[0]].append(current_dict)
-        return output_data
+        output_dict = self._dict
+        output_dict['value'] = output_data
+        yield output_dict

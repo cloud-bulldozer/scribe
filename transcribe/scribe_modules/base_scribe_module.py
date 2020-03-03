@@ -16,15 +16,14 @@ class ScribeModuleBaseClass(metaclass=ABCMeta):
         self.source_type = input_type
         self.host = host_name
         self.scribe_uuid = scribe_uuid
-        # self.value = list(input_dict.values())[0]
+        self._dict = dict(module=self.module, host=self.host,
+                          source_type=self.source_type,
+                          scribe_uuid=self.scribe_uuid)
+        if input_dict:
+            self._input_dict = input_dict
+        else:
+            raise ValueError('Input dictionary is empty')
 
-    # Ideally we'd be using abstractmethod
-    # however since we dont want children classes to write their
-    # own methods, we'll be not be using it
-    # This also allows users to implement their own __iter__ function
-    # in their classes where they can make the object's entities iterable
-    # as they please
-    # @abstractmethod
-    def __iter__(self):
-        for attr, value in self.__dict__.items():
-            yield attr, value
+    @abstractmethod
+    def parse(self):
+        pass

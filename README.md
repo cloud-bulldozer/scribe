@@ -32,10 +32,8 @@ takes 2 inputs and can be run as follows.
 
 ### Using scribe as a python library
 
-If you're just looking for a way to use scribe to generate documents and
-consume them to build your JSON, which would be scribe's use case. You can do
-something like the following.
-The smallest sample would look like:
+If you're just looking for a way to use `scribe` to generate documents and
+consume them, take a look at `run_scribe.py` (excerpt below):
 
 	from transcribe.render import transcribe
     for scribe_object in transcribe('/tmp/stockpile.json','stockpile'):
@@ -264,7 +262,7 @@ Note: The name of the yml file should match that of the scribe_modules class
 that you create it for. Thus, for 'example1' class the file should be named
 'example1.yml'
 
-3. When adding a new scribe module for Stockpile please be sure to include 
+3. When adding a new scribe module for Stockpile please be sure to include
 an example resulting json with the same name. This will be run in our
 CI test suite. An easy way to obtain this json is by running the following
 from your stockpile directory:

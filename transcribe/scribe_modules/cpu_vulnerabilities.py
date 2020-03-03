@@ -1,5 +1,4 @@
 from . import ScribeModuleBaseClass
-from . lib.util import format_url
 
 
 class Cpu_vulnerabilities(ScribeModuleBaseClass):
@@ -11,20 +10,10 @@ class Cpu_vulnerabilities(ScribeModuleBaseClass):
                                        host_name=host_name,
                                        input_type=input_type,
                                        scribe_uuid=scribe_uuid)
-        if input_dict:
-            self._assign_properties(self._parse(input_dict))
 
-
-    def __iter__(self):
-        for attr, value in self.__dict__.items():
-            yield attr, value
-
-    def _assign_properties(self, initial_data):
-        for key in initial_data:
-            setattr(self, key, initial_data[key])
-
-    def _parse(self, input_parse):
-        output_dict = {}
+    def parse(self):
+        input_parse = self._input_dict
+        output_dict = self._dict
         if '/' in input_parse:
             input_string = input_parse.split('/')[-1]
         else:
@@ -48,4 +37,4 @@ class Cpu_vulnerabilities(ScribeModuleBaseClass):
                         mitigation_string[1]
             else:
                 output_dict['mitigation_exists'] = False
-        return output_dict
+        yield output_dict

@@ -1,8 +1,5 @@
 from . import ScribeModuleBaseClass
-
-import re as _re
-import sys
-
+from . lib.util import validate_length
 
 class K8s_pods(ScribeModuleBaseClass):
 
@@ -13,14 +10,9 @@ class K8s_pods(ScribeModuleBaseClass):
                                        host_name=host_name,
                                        input_type=input_type,
                                        scribe_uuid=scribe_uuid)
-        if input_dict:
-            self.value = self._parse(input_dict)
 
-    def __iter__(self):
-        for attr, value in self.__dict__.items():
-            yield attr, value
-
-    def _parse(self, items_full):
+    def parse(self):
+        items_full = self._input_dict
         def to_list(first_lvl, second_lvl, my_dict):
             if first_lvl in my_dict:
                 if second_lvl in my_dict[first_lvl]:
@@ -33,14 +25,12 @@ class K8s_pods(ScribeModuleBaseClass):
                     tmp_list.append(my_dict[first_lvl][second_lvl])
                     my_dict[first_lvl][second_lvl] = tmp_list
             return my_dict
+        validate_length(len(items_full), self.module)
         # Flatten some of the dictionaries to lists
-        if len(items_full) <= 1:
-            print("Error occured in processing k8s Pods data")
-            sys.exit(1)
-
         items_full = to_list("metadata","annotations",items_full)
         items_full = to_list("metadata","labels",items_full)
-        items_full = to_list("spec","securityContext",items_full)    
-        items_full = to_list("spec","nodeSelector",items_full) 
-
-        return items_full
+        items_full = to_list("spec","securityContext",items_full)
+        items_full = to_list("spec","nodeSelector",items_full)
+        output_dict = self._dict
+        output_dict['value'] = items_full
+        yield output_dict
