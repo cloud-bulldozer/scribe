@@ -10,9 +10,10 @@ echo '-----|-------|------' >> results.markdown
 git clone https://github.com/cloud-bulldozer/stockpile.git
 
 cp stockpile/ci/all.yml stockpile/group_vars/all.yml
+cp stockpile/ci/kubernetes.yml stockpile/group_vars/kubernetes.yml
 
 sed -i 's/\/tmp\/stockpile.json/\/tmp\/stockpile_scribe.json/' stockpile/group_vars/all.yml
-sed -i 's/\/tmp\/container/\/tmp\/scribe_container/' stockpile/group_vars/all.yml
+sed -i 's/\/tmp\/container/\/tmp\/scribe_container/' stockpile/group_vars/kubernetes.yml
 
 cd stockpile
 
