@@ -31,6 +31,7 @@ class K8s_namespaces(ScribeModuleBaseClass):
         new_items = new_items.replace(" \"","\"")
         new_items = new_items.replace(":\"{",": {")
         new_items = new_items.replace("}\"}","}}")
+        new_items = new_items.replace("}}\"","}}")
         if len(new_items) <= 1:
             print("Error occured in processing k8s Namespaces data")
             sys.exit(1)
