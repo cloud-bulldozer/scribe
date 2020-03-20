@@ -14,12 +14,12 @@ def main():
         '-t', '--scribe-type', dest="type", nargs='?', choices=['stockpile'],
         default=_default_scribe_type,
         help='Type of data scribe would work with. Example: Stockpile, Foo..\
-        Defaults to /{}'.format(_default_scribe_type)
+        Defaults to {}'.format(_default_scribe_type)
     )
     parser.add_argument(
         '-ip', '--input-path', dest="input_path", nargs='?',
         default=_default_input_path,
-        help='path for input-data. Defaults to /{}'.format(_default_input_path)
+        help='path for input-data. Defaults to {}'.format(_default_input_path)
     )
     input_args = parser.parse_args()
     if input_args.input_path:
