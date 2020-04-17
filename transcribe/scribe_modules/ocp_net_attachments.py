@@ -1,10 +1,7 @@
-import json
-
-from . import ScribeModuleBaseClass
 from transcribe.scribe_modules.lib import util
+from . import ScribeModuleBaseClass
 
-
-class K8s_namespaces(ScribeModuleBaseClass):
+class Ocp_net_attachments(ScribeModuleBaseClass):
 
     def __init__(self, input_dict=None, module_name=None, host_name=None,
                  input_type=None, scribe_uuid=None):
