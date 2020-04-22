@@ -11,7 +11,7 @@ class K8s_nodes(ScribeModuleBaseClass):
                                        input_type=input_type,
                                        scribe_uuid=scribe_uuid)
 
-    def _parse(self):
+    def parse(self):
         nodes_full = self._input_dict
         # Flatten some of the dictionaries to lists
         validate_length(len(nodes_full), self.module)
