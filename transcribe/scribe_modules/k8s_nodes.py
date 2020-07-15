@@ -1,5 +1,6 @@
 from . import ScribeModuleBaseClass
 from . lib.util import to_list, validate_length
+from . lib.k8s_util import remove_managed_fields
 
 class K8s_nodes(ScribeModuleBaseClass):
 
@@ -19,5 +20,6 @@ class K8s_nodes(ScribeModuleBaseClass):
         nodes_full = to_list("metadata","annotations",nodes_full)
         nodes_full = to_list("metadata","labels",nodes_full)
         output_dict = self._dict
+        remove_managed_fields(nodes_full)
         output_dict['value'] = nodes_full
         yield output_dict
