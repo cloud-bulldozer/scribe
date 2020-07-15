@@ -22,7 +22,7 @@ class ScribeModuleBaseClass(metaclass=ABCMeta):
         if input_dict:
             self._input_dict = input_dict
         else:
-            raise ValueError('Input dictionary is empty')
+            raise ValueError('Input dictionary is empty for module %s' % module_name)
 
     @abstractmethod
     def parse(self):
