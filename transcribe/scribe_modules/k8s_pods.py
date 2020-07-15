@@ -1,5 +1,6 @@
 from . import ScribeModuleBaseClass
 from . lib.util import validate_length
+from . lib.k8s_util import remove_managed_fields
 
 class K8s_pods(ScribeModuleBaseClass):
 
@@ -31,6 +32,7 @@ class K8s_pods(ScribeModuleBaseClass):
         items_full = to_list("metadata","labels",items_full)
         items_full = to_list("spec","securityContext",items_full)
         items_full = to_list("spec","nodeSelector",items_full)
+        remove_managed_fields(items_full)
         output_dict = self._dict
         output_dict['value'] = items_full
         yield output_dict

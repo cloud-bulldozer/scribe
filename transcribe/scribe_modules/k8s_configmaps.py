@@ -1,5 +1,6 @@
 from . import ScribeModuleBaseClass
 from . lib.util import to_list, validate_length
+from . lib.k8s_util import remove_managed_fields
 
 class K8s_configmaps(ScribeModuleBaseClass):
 
@@ -25,6 +26,7 @@ class K8s_configmaps(ScribeModuleBaseClass):
             tmp_list = []
             tmp_list.append(items_full["data"])
             items_full["data"] = tmp_list
+        remove_managed_fields(items_full)
         output_dict = self._dict
         output_dict['value'] = items_full
         yield output_dict
