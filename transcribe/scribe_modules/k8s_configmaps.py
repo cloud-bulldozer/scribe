@@ -1,6 +1,7 @@
 from . import ScribeModuleBaseClass
-from . lib.util import to_list, validate_length
-from . lib.k8s_util import remove_managed_fields
+from . lib.util import dict_to_list, validate_length
+from . lib.k8s_util import remove_unused_fields
+
 
 class K8s_configmaps(ScribeModuleBaseClass):
 
@@ -16,17 +17,11 @@ class K8s_configmaps(ScribeModuleBaseClass):
         items_full = self._input_dict
         validate_length(len(items_full), self.module)
         # Flatten some of the dictionaries to lists
-        items_full = to_list("metadata","annotations",items_full)
-        items_full = to_list("metadata","labels",items_full)
+        remove_unused_fields(items_full)
+        items_full["metadata"]["annotations"] = dict_to_list(items_full, "metadata", "annotations")
+        items_full["metadata"]["labels"] = dict_to_list(items_full, "metadata", "labels")
         if "data" in items_full.keys():
-            # If . in key name replace it with with an _
-            for my_key in items_full["data"].keys():
-                if "." in my_key:
-                    items_full["data"][my_key.replace('.','_')] = items_full["data"].pop(my_key)
-            tmp_list = []
-            tmp_list.append(items_full["data"])
-            items_full["data"] = tmp_list
-        remove_managed_fields(items_full)
+            items_full["data"] = str(items_full["data"])
         output_dict = self._dict
         output_dict['value'] = items_full
         yield output_dict
