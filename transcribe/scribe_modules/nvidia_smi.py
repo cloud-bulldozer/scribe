@@ -1,8 +1,9 @@
 from . import ScribeModuleBaseClass
-from . lib.util import validate_length
+from . lib.util import validate_length, dict_to_list
 
 import sys
 import xmltodict
+from collections import OrderedDict
 
 class Nvidia_smi(ScribeModuleBaseClass):
     
@@ -19,9 +20,39 @@ class Nvidia_smi(ScribeModuleBaseClass):
         self._dict["value"] = {}
         self._dict["value"] = xmltodict.parse(self._input_dict['xml'])['nvidia_smi_log']
         
+        keys_to_toss = ["fan_speed", \
+                        "performance_state", \
+                        "clocks_throttle_reasons", \
+                        "fb_memory_usage", \
+                        "bar1_memory_usage", \
+                        "compute_mode", \
+                        "utilization", \
+                        "encoder_stats", \
+                        "fbc_stats", \
+                        "ecc_mode", \
+                        "ecc_errors", \
+                        "retired_pages", \
+                        "remapped_rows", \
+                        "temperature", \
+                        "power_readings", \
+                        "clocks", \
+                        "applications_clocks", \
+                        "default_applications_clocks", \
+                        "max_clocks", \
+                        "max_customer_boost_clocks", \
+                        "clock_policy", \
+                        "supported_clocks", \
+                        "processes", \
+                        "accounted_processes"]
+
+        temp_list = []
         if "gpu" in self._dict["value"]:
-            for gpu_keys in self._dict["value"]["gpu"]:
-                while "fan_speed" in gpu_keys:
-                    gpu_keys.popitem()
+            for gpu_dict in self._dict["value"]["gpu"]:
+                keep = keys_to_toss ^ gpu_dict.keys()
+                temp_list.append(dict((key, gpu_dict[key]) for key in keep))
+            
+            temp_list = [OrderedDict(sorted(i.items())) for i in temp_list]
+            self._dict["value"]["gpu"] = temp_list
+            self._dict["value"]["gpu"] = dict_to_list(self._dict, "value", "gpu")
         
         yield self._dict
