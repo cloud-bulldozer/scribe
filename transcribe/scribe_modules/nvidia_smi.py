@@ -53,6 +53,6 @@ class Nvidia_smi(ScribeModuleBaseClass):
             
             temp_list = [OrderedDict(sorted(i.items())) for i in temp_list]
             self._dict["value"]["gpu"] = temp_list
-            self._dict["value"]["gpu"] = dict_to_list(self._dict, "value", "gpu")
+            self._dict["value"]["gpu"] = [dict_to_list(i) for i in self._dict["value"]["gpu"]]
         
         yield self._dict
