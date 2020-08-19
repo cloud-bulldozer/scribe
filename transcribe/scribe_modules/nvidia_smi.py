@@ -18,4 +18,10 @@ class Nvidia_smi(ScribeModuleBaseClass):
         validate_length(len(self._input_dict['xml']), self.module)
         self._dict["value"] = {}
         self._dict["value"] = xmltodict.parse(self._input_dict['xml'])['nvidia_smi_log']
+        
+        if "gpu" in self._dict["value"]:
+            for gpu_keys in self._dict["value"]["gpu"]:
+                while "fan_speed" in gpu_keys:
+                    gpu_keys.popitem()
+        
         yield self._dict
