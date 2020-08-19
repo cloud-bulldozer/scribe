@@ -1,6 +1,7 @@
 from . import ScribeModuleBaseClass
-from . lib.util import to_list, validate_length
-from . lib.k8s_util import remove_managed_fields
+from . lib.util import dict_to_list, validate_length
+from . lib.k8s_util import remove_unused_fields
+
 
 class K8s_nodes(ScribeModuleBaseClass):
 
@@ -14,12 +15,11 @@ class K8s_nodes(ScribeModuleBaseClass):
 
     def parse(self):
         nodes_full = self._input_dict
-        # Flatten some of the dictionaries to lists
         validate_length(len(nodes_full), self.module)
+        remove_unused_fields(nodes_full)
         # Flatten some of the dictionaries to lists
-        nodes_full = to_list("metadata","annotations",nodes_full)
-        nodes_full = to_list("metadata","labels",nodes_full)
+        nodes_full["metadata"]["annotations"] = dict_to_list(nodes_full, "metadata", "annotations")
+        nodes_full["metadata"]["labels"] = dict_to_list(nodes_full, "metadata", "labels")
         output_dict = self._dict
-        remove_managed_fields(nodes_full)
         output_dict['value'] = nodes_full
         yield output_dict
