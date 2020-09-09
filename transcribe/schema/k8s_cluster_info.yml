@@ -1,0 +1,16 @@
+scribe_uuid:
+  type: string
+  required: True
+host:
+  type: string
+  required: True
+module:
+  type: string
+  required: True
+source_type:
+  type: string
+  allowed: ['stockpile','foo']
+  required: True
+value:
+  type: dict
+  required: False
