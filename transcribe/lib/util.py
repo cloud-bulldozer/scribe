@@ -22,7 +22,7 @@ def check_file(input_data_path):
 def load_schema_file(key):
     schema_path = schema_path_parent.format(key)
     schema_path_key = pkg_resources.resource_filename('scribe', schema_path)
-    return yaml.load(open(schema_path_key),Loader=yaml.SafeLoader)
+    return yaml.load(open(schema_path_key), Loader=yaml.SafeLoader)
 
 
 def validate_document(input_dict, input_schema):

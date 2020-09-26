@@ -1,17 +1,9 @@
+import re
 from . import ScribeModuleBaseClass
 from . lib.util import validate_length
 
-import re as _re
 
 class Dmidecode(ScribeModuleBaseClass):
-
-    def __init__(self, input_dict=None, module_name=None, host_name=None,
-                 input_type=None, scribe_uuid=None):
-        ScribeModuleBaseClass.__init__(self, module_name=module_name,
-                                       input_dict=input_dict,
-                                       host_name=host_name,
-                                       input_type=input_type,
-                                       scribe_uuid=scribe_uuid)
 
     def parse(self):
         dmide_fullinput = self._input_dict
@@ -36,8 +28,8 @@ class Dmidecode(ScribeModuleBaseClass):
             for x in range(len(split_lines)):
                 # There are cases where the value has leading whitespaces
                 # And also removing multiple whitespaces in general
-                split_lines[x] = _re.sub(r":\s\s+", ": ", split_lines[x])
-                split_lines[x] = _re.sub(r"\s\s+", "", split_lines[x])
+                split_lines[x] = re.sub(r":\s\s+", ": ", split_lines[x])
+                split_lines[x] = re.sub(r"\s\s+", "", split_lines[x])
             if split_lines[0] != "" and len(split_lines) >= 2:
                 # Dealing with keys having whitespaces
                 split_lines[0] = split_lines[0].replace(' ', '_')

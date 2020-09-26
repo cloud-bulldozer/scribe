@@ -1,6 +1,3 @@
-scribe_uuid:
-  type: string
-  required: True
 host:
   type: string
   required: True
@@ -9,7 +6,7 @@ module:
   required: True
 source_type:
   type: string
-  allowed: ['stockpile','foo']
+  allowed: ['stockpile']
   required: True
 value:
   type: dict

@@ -1,6 +1,3 @@
-scribe_uuid:
-  type: string
-  required: True
 host:
   type: string
   required: True
