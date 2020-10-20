@@ -208,28 +208,13 @@ would involve:
 
   class Scribe_module_1(ScribeModuleBaseClass):
 
-      def __init__(self, input_dict=None, module_name=None, host_name=None,
-                   input_type=None, scribe_uuid=None):
-          ScribeModuleBaseClass.__init__(self, module_name=module_name,
-                                         input_dict=input_dict,
-                                         host_name=host_name,
-                                         input_type=input_type,
-                                         scribe_uuid=scribe_uuid)
-          if input_dict:
-              new_dict = {}
-              # ... this is where transformation occurs
-              # ... can call other member functions of class
-              # ... can set the entities of the class object like
-              self.entity_1 = input_dict
-
-      # This isn't needed here, as it's how the __iter__ function is defined
-      # in the parent class and it's not an abstractmethod, so only if you'd
-      # like to change how __iter__ method should work for your class, you
-      # should add the following next lines.
-      # Not recommended, unless you know what you're doing
-      def __iter__(self):
-            # ... your definition of how to make it iterable
-
+      # This is the abstract method we have to override
+      def parse(self):
+          # input data is passed through self._input_dict
+          # here is where data manipulation occurs to fit our requirements
+          output_dict = {"value": self._input_dict}
+          # output data should be passed under the "value" key of a dictionary
+          yield output_dict
 
 ```
 
@@ -244,11 +229,7 @@ ensure that '(ScribeModuleBaseClass)' is present when you write the class.
 c) The first letter in classname must be uppercase that's how factory method is
 defined.
 
-d) The \_\_init\_\_ function first calls the parent's \_\_init\_\_ function and passes
-the default arguments which are module_name, input_dict, host_name, input_type
-and scribe_uuid. Please note that no more arguments can be passed.
-
-e) setting the new entities should be done inside the \_\_init\_\_ function only,
+d) setting the new entities should be done inside the __parse___ method only,
 but the user has flexibility of calling another method from either same class
 or from lib/util.py to do transformation.
 
